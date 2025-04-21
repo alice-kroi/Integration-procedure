@@ -539,17 +539,7 @@ def get_image_paths(folder_path):
 if __name__ == '__main__':
     # 使用示例（输入输出目录不同）
     '''
-    process_all_in_one(
-        'E:/github/autolabel/datasets/input/test_data',
-        'E:/github/autolabel/datasets/input/test_data'
-    )
-    
-    batch_add_image_data('E:/github/autolabel/datasets/input/test_data')
-    reorganize_by_labels('E:/github/autolabel/datasets/input/test_data')
-    batch_rename_media('E:/github/autolabel/datasets/input/test_data', ['window', 'wall', 'floorplan', 'door'])'''
-    #process_labelme_dataset('E:/github/autolabel/datasets/input/test_data')
 
-    #batch_rename_sequence('C:/Users/Administrator/Desktop/标完改')
     create_labelme_dataset('E:/github/autolabel/datasets/output/labelme_data/images')
     img_list=get_image_paths('E:/github/autolabel/datasets/output/labelme_data/images')
     print(img_list)
@@ -572,4 +562,4 @@ if __name__ == '__main__':
         yolo2labelme.add_bboxes_to_labelme(json_path, walls, 'floorplan')
     #batch_rename_media('E:/github/autolabel/datasets/output/labelme_data/images', ['window', 'wall', 'floorplan', 'door'])
     process_labelme_dataset('E:/github/autolabel/datasets/output/labelme_data/images')
-    
+    '''

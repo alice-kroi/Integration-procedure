@@ -1,0 +1,16 @@
+# 数据集配置
+input_path: "path/to/dataset"
+img_extensions: [".jpg", ".png", ".jpeg", ".bmp"]
+ann_formats:
+  COCO:
+    required: ["annotations.json"]
+    structure: ["images", "annotations"]
+  YOLO:
+    required: ["labels"]
+    extensions: [".txt"]
+  VOC:
+    required: ["Annotations"]
+    extensions: [".xml"]
+  Labelme:
+    extensions: [".json"]
+    pattern: "^.*\\.json$"

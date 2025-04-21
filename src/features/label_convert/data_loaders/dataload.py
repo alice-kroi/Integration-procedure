@@ -463,6 +463,25 @@ class DataLoader:
             json_path = output_dir / f"{Path(img['file_name']).stem}.json"
             with open(json_path, 'w') as f:
                 json.dump(labelme_data, f, indent=2)
+    @classmethod
+    def from_config(cls, config_path: str):
+        """类方法实现配置加载"""
+        with open(config_path, 'r', encoding='utf-8') as f:
+            config = yaml.safe_load(f)
+        
+        input_path = Path(config['input_path']).expanduser().resolve()
+        instance = cls(input_path)
+        
+        if 'img_extensions' in config:
+            instance.img_extensions = tuple(config['img_extensions'])
+        
+        if 'ann_formats' in config:
+            for fmt in config['ann_formats'].values():
+                if 'structure' in fmt:
+                    fmt['structure'] = set(fmt['structure'])
+            instance.ann_formats = config['ann_formats']
+        
+        return instance
 # 使用示例
 if __name__ == "__main__":
     loader = DataLoader("path/to/dataset")
