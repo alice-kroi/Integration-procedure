@@ -20,6 +20,16 @@ def label_convert():
     ])
     return '<script>window.location.href="http://localhost:8502";</script>'
 
+@app.route('/yolo_detect')
+def yolo_detect():
+    """启动YOLO检测功能"""
+    subprocess.Popen([
+        'streamlit', 'run', 
+        'src/features/yolo_detect/main_paign.py',
+        '--server.port', '8501'
+    ])
+    return '<script>window.location.href="http://localhost:8501";</script>'
+
 if __name__ == '__main__':
     # 启动Flask主服务
     threading.Thread(
