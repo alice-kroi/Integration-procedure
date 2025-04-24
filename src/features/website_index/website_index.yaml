@@ -1,0 +1,12 @@
+- name: GitHub
+  url: https://github.com
+  description: 代码托管平台
+  tags: [开发, 开源]
+- name: 知乎
+  url: https://zhihu.com
+  description: 中文问答社区
+  tags: [问答, 知识分享]
+- name: 哔哩哔哩
+  url: https://bilibili.com
+  description: 视频弹幕网站
+  tags: [视频, 娱乐]
