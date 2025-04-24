@@ -99,6 +99,8 @@ class AnnotationGenerator:
 def process_dataset(src_dir, dest_dir, class_names, format=DatasetFormat.YOLO):
     """处理数据集并生成指定格式"""
     generator = AnnotationGenerator(class_names, format)
+    dest_dir = Path(dest_dir)
+    dest_dir.mkdir(parents=True, exist_ok=True)
     
     for img_path in Path(src_dir).rglob("*.*"):
         if img_path.suffix.lower() in ['.jpg', '.png', '.jpeg']:
@@ -117,7 +119,7 @@ def process_dataset(src_dir, dest_dir, class_names, format=DatasetFormat.YOLO):
 
         
 if __name__ == "__main__":
-    src_dir = r"test_data/images"  # 原始图片目录
-    dest_dir = r"test_data/yolo"  # 目标目录
+    src_dir = r"images"  # 原始图片目录
+    dest_dir = r"yolo"  # 目标目录
     class_names = ["class_1", "class_2", "class_3"]  # 自定义类别
     process_dataset(src_dir, dest_dir, ["cat", "dog"], DatasetFormat.YOLO)
