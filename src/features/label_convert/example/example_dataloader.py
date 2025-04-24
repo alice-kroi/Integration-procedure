@@ -1,6 +1,6 @@
 import sys
 from pathlib import Path
-
+from data_loaders.dataload import load_from_config
 # 添加目录到对应路径
 sys.path.append(str(Path(__file__).parent.parent.parent.parent))
 
