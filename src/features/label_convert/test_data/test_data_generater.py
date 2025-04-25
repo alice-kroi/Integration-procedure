@@ -101,6 +101,9 @@ class AnnotationGenerator:
             print(f"缓存 COCO 标注 (图像ID: {img_id})")
 def process_dataset(src_dir, dest_dir, class_names, format=DatasetFormat.YOLO):
     """处理数据集并生成指定格式"""
+    from .test_data_generater import DatasetFormat
+    if isinstance(format, str):
+        format = DatasetFormat[format.upper()]
     generator = AnnotationGenerator(class_names, format)
     dest_dir = Path(dest_dir)
     dest_dir.mkdir(parents=True, exist_ok=True)

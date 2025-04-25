@@ -31,13 +31,47 @@ def show_testdata_generator():
     """显示测试数据生成界面"""
     st.title("🧪 测试数据生成工具")
     
+    # 输出目录选择组件（放在表单外）
+    output_col1, output_col2 = st.columns([4, 1])
+    with output_col1:
+        output_dir = st.text_input(
+            "输出目录",
+            st.session_state.get("selected_test_output_dir", "./test_data")
+        )
+    with output_col2:
+        if st.button("📁 浏览", key="test_output_browse", use_container_width=True):
+            import threading
+            from queue import Queue
+            from tkinter import Tk, filedialog
+            
+            result_queue = Queue()
+            def test_output_picker(q):
+                try:
+                    root = Tk()
+                    root.attributes('-topmost', True)
+                    root.withdraw()
+                    folder = filedialog.askdirectory(parent=root)
+                    q.put(folder.replace("\\", "/") if folder else None)
+                    root.destroy()
+                except: 
+                    q.put(None)
+
+            thread = threading.Thread(target=test_output_picker, args=(result_queue,))
+            thread.start()
+            thread.join()
+            
+            selected_dir = result_queue.get()
+            if selected_dir:
+                st.session_state.selected_test_output_dir = selected_dir
+                st.rerun()
+
+    # 配置表单
     with st.form("test_data_config"):
         col1, col2 = st.columns(2)
         
         with col1:
             num_images = st.number_input("生成图像数量", 1, 1000, 50)
             img_size = st.selectbox("图像尺寸", ["640x480", "800x600", "1024x768"], index=0)
-            output_dir = st.text_input("输出目录", "./test_data")
             
         with col2:
             class_names = st.text_area("类别列表", "cat\ndog\ncar", help="每行一个类别名称")
@@ -48,6 +82,7 @@ def show_testdata_generator():
             seed = st.number_input("随机种子", value=42)
             clean_output = st.checkbox("清空输出目录", value=True)
         
+        # 表单提交按钮
         if st.form_submit_button("开始生成", type="primary"):
             try:
                 generate_test_data(
@@ -66,16 +101,31 @@ def show_testdata_generator():
 
 def generate_test_data(num_images, img_size, class_names, output_dir, format, seed, clean_output):
     """调用测试数据生成器"""
-    from features.label_convert.test_data.test_data_generater import process_dataset
+    from test_data.test_data_generater import process_dataset,DatasetFormat
     from pathlib import Path
     import shutil
     import tempfile
+
+    # 转换格式参数为枚举类型
+    format_enum = DatasetFormat[format.upper()]
     
-    # 创建临时图像目录
+    # 创建临时图像目录 (调整到正确位置)
     with tempfile.TemporaryDirectory() as tmp_img_dir:
         # 生成虚拟图像文件
         for i in range(num_images):
             (Path(tmp_img_dir) / f"image_{i:04d}.jpg").touch()
+        
+        # 清空输出目录
+        if clean_output and Path(output_dir).exists():
+            shutil.rmtree(output_dir)
+        
+        # 调用生成器 (使用正确的参数)
+        process_dataset(
+            src_dir=tmp_img_dir,
+            dest_dir=output_dir,
+            class_names=class_names,
+            format=format_enum  # 使用转换后的枚举值
+        )
         
         # 清空输出目录
         if clean_output and Path(output_dir).exists():
