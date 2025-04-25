@@ -2,7 +2,8 @@ import json
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Dict, List, Union
-
+import numpy as np
+import yaml
 class DataLoader:
     """通用标注数据加载器，支持自动识别格式
     
@@ -484,9 +485,9 @@ class DataLoader:
         return instance
 # 使用示例
 if __name__ == "__main__":
-    loader = DataLoader("path/to/dataset")
+    loader = DataLoader(r"E:\github\Integration-procedure\src\features\label_convert\test_data\yolo")
     dataset = loader.load()
     print(f"成功加载 {len(dataset['images'])} 张图像")
     # 导出为指定格式（支持任意选择）
-    loader.export(dataset, "output/yolo", "YOLO")  # 导出为YOLO格式
-    loader.export(dataset, "output/voc", "VOC")    # 导出为VOC格式
+    #loader.export(dataset, "output/yolo", "YOLO")  # 导出为YOLO格式
+    loader.export(dataset, r"E:\github\Integration-procedure\src\features\label_convert\test_data\voc", "VOC")    # 导出为VOC格式
