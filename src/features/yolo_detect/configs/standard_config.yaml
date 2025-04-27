@@ -38,12 +38,17 @@ training:
 # 数据增强配置（Albumentations兼容格式）
 augmentation:
   geometric:
+    random_resized_crop:
+      min_scale: 0.5
+      max_scale: 1.0
+      aspect_ratio: [0.75, 1.33]
+      interpolation: 1  # 与代码中的cv2.INTER_LINEAR对应
     rotation:
       degrees: 15
       p: 0.5
     scale: 
       min: 0.5
-      max: 1.5
+      max: 0.8
       p: 0.8
     translation:
       x: 0.2

@@ -21,13 +21,20 @@ class YOLODataset(Dataset):
                            for f in self.img_files]
         self.img_size = img_size
         self.augment = augment
-        
+        print(img_size)
         # 定义数据增强管道
+        # 更新数据增强配置
         self.transform = A.Compose([
             A.HorizontalFlip(p=0.5),
             A.RandomBrightnessContrast(p=0.2),
             A.HueSaturationValue(p=0.2),
-            A.RandomResizedCrop(height=img_size, width=img_size, scale=(0.5, 1.0)),
+            A.RandomResizedCrop(
+                height=img_size,
+                width=img_size,
+                scale=(0.5, 1.0),
+                ratio=(0.75, 1.33),
+                interpolation=1  # 添加插值参数
+            ),
         ], bbox_params=A.BboxParams(format='yolo'))
 
     def __len__(self):
@@ -72,3 +79,8 @@ def create_dataloader(data_dir, batch_size=16,num_workers=4, **kwargs):
         pin_memory=True,
         collate_fn=lambda batch: tuple(zip(*batch))  # 保持图像和标签分离
     )
+
+if __name__ == "__main__":
+    data_dir = "E:/github/Integration-procedure/src/features/yolo_detect/datasets/yolo/train"  # 替换为你的数据集路径
+    train_loader = create_dataloader(data_dir, batch_size=4, augment=True)
+    #val_loader = create_dataloader(data_dir, batch_size=4, augment=False)
