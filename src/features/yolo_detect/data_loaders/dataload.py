@@ -16,9 +16,12 @@ class YOLODataset(Dataset):
         :param img_size: 训练图像尺寸
         :param augment: 是否启用数据增强
         """
-        self.img_files = list(Path(data_dir).glob("images/*.jpg"))
-        self.label_files = [f.parent.parent/"labels"/f.stem.with_suffix(".txt") 
-                           for f in self.img_files]
+        self.img_files = list(Path(data_dir).glob("images/*.jpg")) + \
+                        list(Path(data_dir).glob("images/*.png"))
+        self.label_files = [
+            f.parent.parent / "labels" / f.with_suffix(".txt").name 
+            for f in self.img_files
+        ]
         self.img_size = img_size
         self.augment = augment
         print(img_size)
