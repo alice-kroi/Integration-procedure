@@ -56,7 +56,7 @@ class YOLODataset(Dataset):
         
         return img, labels
 
-def create_dataloader(data_dir, batch_size=16, **kwargs):
+def create_dataloader(data_dir, batch_size=16,num_workers=4, **kwargs):
     """
     创建数据加载器
     :param data_dir: 数据集根目录
@@ -68,7 +68,7 @@ def create_dataloader(data_dir, batch_size=16, **kwargs):
         dataset,
         batch_size=batch_size,
         shuffle=True,
-        num_workers=4,
+        num_workers=num_workers,
         pin_memory=True,
         collate_fn=lambda batch: tuple(zip(*batch))  # 保持图像和标签分离
     )

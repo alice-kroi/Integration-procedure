@@ -1,12 +1,81 @@
-# YOLO 数据集配置文件
-# 数据集路径需指向包含images/labels的目录
-path: ../datasets/yolo
-train: ${{path}}/train  # 训练集路径
-val: ${{path}}/val      # 验证集路径
+# YOLOv5 标准化配置文件
+# 版本: 2.0
+# 最后更新: 2024-05-23
 
-# 类别信息 (使用COCO 80类)
-nc: 80
-names: [
+# 硬件配置
+hardware:
+  device: cuda:0  # 默认使用GPU 0
+  workers: 8      # 数据加载线程数
+
+# 路径配置
+paths:
+  project_root: ../../
+  dataset: 
+    root: ${project_root}/datasets/yolo
+    train: ${dataset.root}/train
+    val: ${dataset.root}/val
+  weights_dir: ${project_root}/models/weights
+
+# 模型参数
+model:
+  name: yolov5s
+  pretrained: True
+  input_size: [640, 640]  # 输入尺寸 [width, height]
+  num_classes: 80
+
+# 训练参数
+training:
+  epochs: 100
+  batch_size: 32
+  optimizer: 
+    type: Adam
+    lr: 0.001
+    weight_decay: 0.0005
+  scheduler:
+    type: CosineAnnealing
+    t_max: 50
+
+# 数据增强配置（Albumentations兼容格式）
+augmentation:
+  geometric:
+    rotation:
+      degrees: 15
+      p: 0.5
+    scale: 
+      min: 0.5
+      max: 1.5
+      p: 0.8
+    translation:
+      x: 0.2
+      y: 0.2
+      p: 0.5
+
+  color:
+    hsv: 
+      h: 0.015
+      s: 0.7
+      v: 0.4
+    contrast: 0.2
+    brightness: 0.2
+
+  special:
+    mosaic: 
+      enabled: True
+      p: 1.0
+    mixup: 
+      enabled: False
+      alpha: 0.2
+
+# 验证参数
+validation:
+  batch_size: 16
+  interval: 1    # 每N个epoch验证一次
+  conf_thres: 0.4
+  iou_thres: 0.5
+
+# 类别标签 (COCO 80类)
+class_labels:
+  names: &id001 [
     'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 'train',
     'truck', 'boat', 'traffic light', 'fire hydrant', 'stop sign', 
     'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse', 'sheep',
@@ -20,14 +89,15 @@ names: [
     'laptop', 'mouse', 'remote', 'keyboard', 'cell phone', 'microwave',
     'oven', 'toaster', 'sink', 'refrigerator', 'book', 'clock', 'vase',
     'scissors', 'teddy bear', 'hair drier', 'toothbrush'
-]
+  ]
+  visualization:
+    colors: random  # 可选 [random, coco, custom]
+    line_thickness: 2
 
-# 数据增强参数 (可选)
-augment:
-  hsv_h: 0.015  # 图像 HSV-Hue 增强
-  hsv_s: 0.7    # 图像 HSV-Saturation 增强
-  hsv_v: 0.4    # 图像 HSV-Value 增强
-  degrees: 0.0  # 旋转角度范围
-  translate: 0.1 # 平移比例
-  scale: 0.5    # 缩放比例范围
-  shear: 0.0    # 剪切强度
+# 日志配置
+logging:
+  tensorboard: True
+  wandb: False
+  checkpoint:
+    interval: 10    # 每N个epoch保存一次权重
+    save_best: True
