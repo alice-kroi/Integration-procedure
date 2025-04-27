@@ -29,11 +29,10 @@ class YOLODataset(Dataset):
             A.RandomBrightnessContrast(p=0.2),
             A.HueSaturationValue(p=0.2),
             A.RandomResizedCrop(
-                height=img_size,
-                width=img_size,
+                size=(img_size, img_size),  # 修改为元组格式
                 scale=(0.5, 1.0),
                 ratio=(0.75, 1.33),
-                interpolation=1  # 添加插值参数
+                interpolation=1
             ),
         ], bbox_params=A.BboxParams(format='yolo'))
 
