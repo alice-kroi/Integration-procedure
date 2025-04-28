@@ -24,7 +24,7 @@ class YOLODataset(Dataset):
         ]
         self.img_size = img_size
         self.augment = augment
-        print(img_size)
+        #print(img_size)
         # 定义数据增强管道
         # 更新数据增强配置
         self.transform = A.Compose([
