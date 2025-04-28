@@ -1,4 +1,5 @@
 from langchain.agents import AgentExecutor
+from langchain.tools.retriever import create_retriever_tool
 from rag_module.retriever import ModRetriever
 from mcp_integration.build_tools import MCPCompiler
 import os

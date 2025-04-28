@@ -3,6 +3,7 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import TextLoader
 from typing import List
+from langchain_core.documents import Document  # 新增导入
 import logging
 
 class ModRetriever:
