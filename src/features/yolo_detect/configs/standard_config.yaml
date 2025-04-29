@@ -19,7 +19,7 @@ paths:
 # 模型参数
 model:
   name: yolov5s
-  pretrained: True
+  pretrained: false
   input_size: [640, 640]  # 输入尺寸 [width, height]
   num_classes: 80
 
