@@ -16,12 +16,15 @@ class YOLODataset(Dataset):
         :param img_size: 训练图像尺寸
         :param augment: 是否启用数据增强
         """
+        print(data_dir)
         self.img_files = list(Path(data_dir).glob("images/*.jpg")) + \
                         list(Path(data_dir).glob("images/*.png"))
         self.label_files = [
             f.parent.parent / "labels" / f.with_suffix(".txt").name 
             for f in self.img_files
         ]
+        print(self.img_files)
+        print(self.label_files)
         self.img_size = img_size
         self.augment = augment
         #print(img_size)
@@ -72,7 +75,11 @@ def create_dataloader(data_dir, batch_size=16,num_workers=4, **kwargs):
     :param batch_size: 批处理大小
     :return: DataLoader实例
     """
+    print("数据地址:",data_dir)
+    print("批次:", batch_size)
+    print("线程:", num_workers)
     dataset = YOLODataset(data_dir, **kwargs)
+    print(dataset.__len__())
     return DataLoader(
         dataset,
         batch_size=batch_size,
@@ -85,4 +92,5 @@ def create_dataloader(data_dir, batch_size=16,num_workers=4, **kwargs):
 if __name__ == "__main__":
     data_dir = "E:/github/Integration-procedure/src/features/yolo_detect/datasets/yolo/train"  # 替换为你的数据集路径
     train_loader = create_dataloader(data_dir, batch_size=4, augment=True)
+    print(len(train_loader))
     #val_loader = create_dataloader(data_dir, batch_size=4, augment=False)

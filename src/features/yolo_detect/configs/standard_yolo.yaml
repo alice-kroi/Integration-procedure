@@ -1,0 +1,10 @@
+# 数据集配置
+train: E:/github/Integration-procedure/src/features/yolo_detect/datasets/yolo/train
+val: .E:/github/Integration-procedure/src/features/yolo_detect/datasets/yolo/val
+test:  # 测试集路径（可选）
+
+# 类别名称
+names: 
+  0: person
+  1: bicycle
+  

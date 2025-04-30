@@ -9,12 +9,12 @@ hardware:
 
 # 路径配置
 paths:
-  project_root: ../../
+  project_root: E:/github/Integration-procedure/src/features/yolo_detect
   dataset: 
-    root: ${project_root}/datasets/yolo
-    train: ${dataset.root}/train
-    val: ${dataset.root}/val
-  weights_dir: ${project_root}/models/weights
+    root: ${paths.project_root}/datasets/yolo
+    train: ${paths.dataset.root}/train
+    val: ${paths.dataset.root}/val
+  weights_dir: ${paths.project_root}/models/weights
 
 # 模型参数
 model:
@@ -25,8 +25,8 @@ model:
 
 # 训练参数
 training:
-  epochs: 100
-  batch_size: 32
+  epochs: 1
+  batch_size: 1
   optimizer: 
     type: Adam
     lr: 0.001

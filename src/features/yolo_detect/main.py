@@ -5,7 +5,7 @@ import yaml
 from pathlib import Path
 import time
 from torch.utils.tensorboard import SummaryWriter
-
+from omegaconf import OmegaConf
 from ultralytics import YOLO
 
 # ... 保留原有导入 ...
@@ -72,7 +72,7 @@ class YOLOTrainer:
             torch.save(state, self.config['paths']['weights_dir'] / f"best_{filename}")
     def train_epoch(self, epoch: int) -> float:
         """执行单个训练epoch"""
-        self.model.train()
+        self.model.train(self.config['training']['train_mode'])
         total_loss = 0.0
         
         for batch_idx, (images, targets) in enumerate(self.train_loader):
@@ -131,10 +131,17 @@ def main():
     config_path = Path(__file__).parent / 'configs' / 'standard_config.yaml'
     with open(config_path, 'r', encoding='utf-8') as f:
         config = yaml.safe_load(f)
+        config = OmegaConf.create(config)
+        resolved_config = OmegaConf.resolve(config)  # 正确解析插值
+          # 转换为普通字典
+    print(config)
     # 新增配置验证
+
     trainer = YOLOTrainer(config)
     best_loss = float('inf')
     
+    trainer.model.train(data='../configs/standard_yolo.yaml')
+    '''
     for epoch in range(config['training']['epochs']):
         # 训练阶段
         train_loss = trainer.train_epoch(epoch)
@@ -145,6 +152,7 @@ def main():
         if val_loss < best_loss:
             trainer._save_checkpoint(epoch, is_best=True)
             best_loss = val_loss
-
+            '''
+    return trainer
 if __name__ == '__main__':
     main()
